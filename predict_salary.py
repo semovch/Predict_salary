@@ -40,7 +40,6 @@ def predict_rub_salary_sj(url, languages, sj_secret_key, sj_msc_index,  sj_max_n
                     }
             headers={
                 'X-Api-App-Id': sj_secret_key
-
                     }
             page_response=requests.get(url, headers=headers, params=parameters)
             page_response.raise_for_status()
