@@ -51,7 +51,7 @@ def predict_rub_salary_sj(url, languages, sj_secret_key, sj_msc_index,  sj_max_n
                     pass
             if len(all_salaries) != 0:    
                 vacancies_stat[f'{language}'] = dict([('average_salary', int(sum(all_salaries)/len(all_salaries))),
-                                                            ('vacancies_found', page_vacancies['total']), ('vacancies_processed', len(all_salaries))])
+                                                      ('vacancies_found', page_vacancies['total']), ('vacancies_processed', len(all_salaries))])
             else:
                 pass
             page += 1
@@ -83,7 +83,7 @@ def predict_rub_salary_hh_Moscow(languages, date_month_ago, url, hh_msc_index):
                     pass
             if len(all_salaries) != 0:
                 vacancies_stat[f'{language}'] = dict([('average_salary', int(sum(all_salaries)/len(all_salaries))),
-                                                            ('vacancies_found', page_vacancies['found']), ('vacancies_processed', len(all_salaries))])
+                                                      ('vacancies_found', page_vacancies['found']), ('vacancies_processed', len(all_salaries))])
             else: 
                 pass
             pages_number=page_response.json()['pages']
