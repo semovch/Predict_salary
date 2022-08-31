@@ -17,14 +17,14 @@ def predict_rub_salary(salary_from, salary_to):
 
 
 def make_table(title, vacancies_stat):
-    table_data = [
+    table_headers = [
         ['Язык программирования', 'Предполагаемая зарплата', 'Вакансий найдено', 'Вакансий обработано']
     ]
     for lang in vacancies_stat:
-        table_data.append([lang, (vacancies_stat[lang]['average_salary']),
+        table_headers.append([lang, (vacancies_stat[lang]['average_salary']),
                            (vacancies_stat[lang]['vacancies_found']), (vacancies_stat[lang]['vacancies_processed'])])
-    table_instance=AsciiTable(table_data, title)
-    return(table_instance.table)
+    table_instance=AsciiTable(table_headers, title)
+    return(table_headers.table)
 
 
 def predict_rub_salary_sj(url, languages, sj_secret_key, sj_msc_index,  sj_max_numb_page):
