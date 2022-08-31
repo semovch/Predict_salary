@@ -61,8 +61,7 @@ def predict_rub_salary_sj(url, languages, sj_secret_key, sj_msc_index,  sj_max_n
                         }
     return vacancies_stat
     
-
-
+    
 def predict_rub_salary_hh_Moscow(languages, date_month_ago, url, hh_msc_index):
     vacancies_stat = {}    
     for language in languages:
