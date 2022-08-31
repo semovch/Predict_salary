@@ -40,6 +40,7 @@ def predict_rub_salary_sj(url, languages, sj_secret_key, sj_msc_index,  sj_max_n
                     }
             headers={
                 'X-Api-App-Id': sj_secret_key
+
                     }
             page_response=requests.get(url, headers=headers, params=parameters)
             page_response.raise_for_status()
@@ -47,13 +48,16 @@ def predict_rub_salary_sj(url, languages, sj_secret_key, sj_msc_index,  sj_max_n
             for vacancy in page_vacancies['objects']:
                 if vacancy['currency'] == 'rub' and vacancy['payment_from'] or vacancy['payment_to']:
                         all_salaries.append(predict_rub_salary(vacancy['payment_from'], vacancy['payment_to']))
-                else:
-                    pass
-            if len(all_salaries) != 0:    
-                vacancies_stat[f'{language}'] = dict([('average_salary', int(sum(all_salaries)/len(all_salaries))),
-                                                      ('vacancies_found', page_vacancies['total']), ('vacancies_processed', len(all_salaries))])
+            if len(all_salaries):    
+                vacancies_stat[f'{language}'] = {
+                    'average_salary': int(sum(all_salaries)/len(all_salaries)),
+                    'vacancies_found': page_vacancies['total'], 
+                    'vacancies_processed': len(all_salaries)
+                        }
             else:
-                pass
+                vacancies_stat[f'{language}'] = {
+                    'vacancies_found': page_vacancies['total']
+                        }
             page += 1
     return vacancies_stat
     
@@ -75,17 +79,20 @@ def predict_rub_salary_hh_Moscow(languages, date_month_ago, url, hh_msc_index):
             page_response=requests.get(url, params=parameters)
             page_response.raise_for_status()
             page_vacancies = page_response.json()
-            for vacancy in (page_vacancies['items']):
+            for vacancy in page_vacancies['items']:
                 if vacancy['salary'] and vacancy['salary']['currency'] == 'RUR':
                     all_salaries.append(predict_rub_salary(vacancy['salary']['from'],
                                         vacancy['salary']['to']))
-                else:
-                    pass
-            if len(all_salaries) != 0:
-                vacancies_stat[f'{language}'] = dict([('average_salary', int(sum(all_salaries)/len(all_salaries))),
-                                                      ('vacancies_found', page_vacancies['found']), ('vacancies_processed', len(all_salaries))])
+            if len(all_salaries):
+                vacancies_stat[f'{language}'] = {
+                    'average_salary': int(sum(all_salaries)/len(all_salaries)),
+                    'vacancies_found': page_vacancies['found'], 
+                    'vacancies_processed': len(all_salaries)
+                        }
             else: 
-                pass
+                vacancies_stat[f'{language}'] = {
+                    'vacancies_found': page_vacancies['found']
+                        }
             pages_number=page_response.json()['pages']
             page += 1
     return vacancies_stat
@@ -104,9 +111,10 @@ def main():
     sj_title = 'SuperJob_Moscow'
     hh_title = 'HeadHunter_Moscow'
     date_month_ago = datetime.date.today() - datetime.timedelta(days=30)
-    print(make_table(hh_title, predict_rub_salary_hh_Moscow(languages, date_month_ago, hh_url, hh_msc_index)), make_table(sj_title, predict_rub_salary_sj(sj_url, languages, sj_secret_key, sj_msc_index,  sj_max_numb_page)))
+    hh_stat = predict_rub_salary_hh_Moscow(languages, date_month_ago, hh_url, hh_msc_index)
+    sj_stat = predict_rub_salary_sj(sj_url, languages, sj_secret_key, sj_msc_index,  sj_max_numb_page)
+    print(make_table(hh_title, hh_stat), make_table(sj_title, sj_stat))
     
     
 if __name__ == '__main__':
     main()
-
