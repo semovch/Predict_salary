@@ -24,7 +24,7 @@ def make_table(title, vacancies_stat):
         table_headers.append([lang, (vacancies_stat[lang]['average_salary']),
                            (vacancies_stat[lang]['vacancies_found']), (vacancies_stat[lang]['vacancies_processed'])])
     table_instance=AsciiTable(table_headers, title)
-    return table_headers.table
+    return table_instance.table
 
 
 def predict_rub_salary_sj(url, languages, sj_secret_key, sj_msc_index,  sj_max_numb_page):
@@ -93,7 +93,7 @@ def predict_rub_salary_hh_Moscow(languages, date_month_ago, url, hh_msc_index):
                 vacancies_stat[f'{language}'] = {
                     'vacancies_found': page_vacancies['found']
                         }
-            pages_number=page_response.json()['pages']
+            pages_number=page_vacancies['pages']
             page += 1
     return vacancies_stat
     
