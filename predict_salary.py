@@ -48,6 +48,7 @@ def predict_rub_salary_sj(url, languages, sj_secret_key, sj_msc_index,  sj_max_n
             for vacancy in page_vacancies['objects']:
                 if vacancy['currency'] == 'rub' and vacancy['payment_from'] or vacancy['payment_to']:
                         all_salaries.append(predict_rub_salary(vacancy['payment_from'], vacancy['payment_to']))
+            page += 1
             if len(all_salaries):    
                 vacancies_stat[f'{language}'] = {
                     'average_salary': int(sum(all_salaries)/len(all_salaries)),
@@ -58,7 +59,6 @@ def predict_rub_salary_sj(url, languages, sj_secret_key, sj_msc_index,  sj_max_n
                 vacancies_stat[f'{language}'] = {
                     'vacancies_found': page_vacancies['total']
                         }
-            page += 1
     return vacancies_stat
     
 
@@ -83,6 +83,8 @@ def predict_rub_salary_hh_Moscow(languages, date_month_ago, url, hh_msc_index):
                 if vacancy['salary'] and vacancy['salary']['currency'] == 'RUR':
                     all_salaries.append(predict_rub_salary(vacancy['salary']['from'],
                                         vacancy['salary']['to']))
+            pages_number=page_vacancies['pages']
+            page += 1
             if len(all_salaries):
                 vacancies_stat[f'{language}'] = {
                     'average_salary': int(sum(all_salaries)/len(all_salaries)),
@@ -93,10 +95,7 @@ def predict_rub_salary_hh_Moscow(languages, date_month_ago, url, hh_msc_index):
                 vacancies_stat[f'{language}'] = {
                     'vacancies_found': page_vacancies['found']
                         }
-            pages_number=page_vacancies['pages']
-            page += 1
-    return vacancies_stat
-    
+    return vacancies_stat    
 
 
 def main():
